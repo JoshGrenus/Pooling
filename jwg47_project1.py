@@ -7,9 +7,27 @@ import numpy as np
 # @param: .pgm filename
 # @return: a tuple (header, image array) # image array - numpy array
 def pgmFileRead(fileName):
+    file = open(fileName, 'r')
     img_header = []   # a place holder
     img = np.array([])   # a place holder
 
+    for line in file:
+        if (len(line)<50):
+            img_header.append(line.strip())
+        else:
+            break
+
+    for item in img_header:
+        if (item.startswith('#')):
+            img_header.remove(item)
+        
+
+
+    print (img_header)
+    print ("\n")
+    print (img)
+
+    file.close()
     return img_header, img
 
 
@@ -23,7 +41,8 @@ def image_save(output_header, image_array, fileName):
 # @return: pooled array
 def max_pooling(input_array, pool_size):
     pooled_array = np.array([])   # a place holder
-    print ("works on both")
+
+
     return pooled_array
 
 
@@ -40,6 +59,7 @@ def main():
     print (imgFileName)
     print (poolSize)
     print (part)
+    pgmFileRead(imgFileName)
 
 
 if __name__ == '__main__':
