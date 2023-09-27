@@ -10,6 +10,8 @@ def pgmFileRead(fileName):
     file = open(fileName, 'r')
     img_header = []   # a place holder
     img = np.array([])   # a place holder
+    imgTmp = []     #temp array to hold pmg values
+    allVals = ""
 
     for line in file:
         if (len(line)<50):
@@ -20,11 +22,21 @@ def pgmFileRead(fileName):
     for item in img_header:
         if (item.startswith('#')):
             img_header.remove(item)
-        
+    pgmSize = img_header[1].split(" ")
+    height = pgmSize[0], width = pgmSize[1]
+    
+    for line in file:
+        imgTmp.append(line.strip())
+    for x in imgTmp:
+        allVals = allVals + " " + x
+    allVals = allVals.split(" ")
+    allVals.remove(' ')
 
 
+    
+    print(allVals)
     print (img_header)
-    print ("\n")
+    print ('\n')
     print (img)
 
     file.close()
