@@ -22,8 +22,8 @@ def image_save(output_header, image_array, fileName):
 # @param: image array, pool size
 # @return: pooled array
 def max_pooling(input_array, pool_size):
-    pooled_arrayop = np.array([])   # a place holder
- 
+    pooled_array = np.array([])   # a place holder
+    print("test")
     return pooled_array
 
 
