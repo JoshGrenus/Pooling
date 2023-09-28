@@ -16,15 +16,17 @@ def pgmFileRead(fileName):
     allVals = ""
 
     for line in file:                               #Loops through to get the header set up, stops after getting max num value.
-        
-        if (len(line) == 4):
+        print ("Current Line")
+        if (len(line) == 4 & line.isdigit()):
            img_header.append(line.strip())
            break
         else:
            img_header.append(line.strip())
 
     for item in img_header:
+        print(item)
         if (item.startswith('#')):
+            print("REmoving")
             img_header.remove(item)
     pgmSize = img_header[1].split(" ")
     height = int(pgmSize[0])
@@ -42,7 +44,11 @@ def pgmFileRead(fileName):
     imgTmp.clear()
     allVals = allVals.split(" ")
     allVals.remove('')
-    img = np.array(allVals).reshape(height,width)
+    img = np.zeros((height,width))
+    print (allVals)
+    img = np.array(allVals)
+    print (img.shape)
+    # = img.reshape(height,width)
 
     print(img_header)
     print('\n')
