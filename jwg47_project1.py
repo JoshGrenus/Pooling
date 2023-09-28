@@ -7,27 +7,28 @@ import numpy as np
 # @param: .pgm filename
 # @return: a tuple (header, image array) # image array - numpy array
 def pgmFileRead(fileName):
-    height = width = col = row = 0
+    height = width = col = row = k =0
+    word = let = ""
     y = 5
     file = open(fileName, 'r')
     img_header = []   # a place holder
     img = np.array([])   # a place holder
     imgTmp = []     #temp array to hold pmg values
+    imgHeadTmp = []
     allVals = ""
 
     for line in file:                               #Loops through to get the header set up, stops after getting max num value.
-        print ("Current Line")
-        if (len(line) == 4 & line.isdigit()):
+        if ("255" in line):
            img_header.append(line.strip())
            break
         else:
            img_header.append(line.strip())
 
     for item in img_header:
-        print(item)
-        if (item.startswith('#')):
-            print("REmoving")
-            img_header.remove(item)
+        if not item.startswith("#"):  # Use != to check for inequality
+            imgHeadTmp.append(item)
+    img_header = imgHeadTmp
+
     pgmSize = img_header[1].split(" ")
     height = int(pgmSize[0])
     width = int(pgmSize[1])
@@ -48,7 +49,7 @@ def pgmFileRead(fileName):
     print (allVals)
     img = np.array(allVals)
     print (img.shape)
-    # = img.reshape(height,width)
+    img = img.reshape(height,width)
 
     print(img_header)
     print('\n')
