@@ -46,9 +46,7 @@ def pgmFileRead(fileName):
     allVals = allVals.split(" ")
     allVals.remove('')
     img = np.zeros((height,width))
-    print (allVals)
     img = np.array(allVals)
-    print (img.shape)
     img = img.reshape(height,width)
 
     print(img_header)
