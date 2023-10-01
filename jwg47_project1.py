@@ -3,6 +3,8 @@
 import sys
 import numpy as np
 import math
+np.set_printoptions(threshold=sys.maxsize)
+
 
 
 # @param: .pgm filename
@@ -67,9 +69,19 @@ def max_pooling(input_array, pool_size):
     newHeight = int(math.ceil(height/int(pool_size)))
     newWidth = int(math.ceil(width/int(pool_size)))
     pooled_array = np.array([])   # a place holder
-    print (newHeight, newWidth)
-    pooled_array = np.zeros((newHeight, newWidth),dtype = int)
-    print (pooled_array)
+    pooled_array = np.zeros((newHeight, newWidth), dtype = int)
+    for x in range(newWidth):
+        for y in range(newHeight):
+            xStart = x * int(pool_size)
+            yStart = y * int(pool_size)
+            xEnd = xStart + int(pool_size)
+            yEnd = yStart + int(pool_size)
+            vals = input_array[xStart:xEnd, yStart:yEnd]
+            maxVal = vals.max()
+            print(vals)
+            print (maxVal)
+
+    
 
     return pooled_array
 
