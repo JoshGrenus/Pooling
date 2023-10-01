@@ -2,11 +2,13 @@
 # Author: your name
 import sys
 import numpy as np
+import math
 
 
 # @param: .pgm filename
 # @return: a tuple (header, image array) # image array - numpy array
 def pgmFileRead(fileName):
+    global height, width
     height = width = col = row = k =0
     word = let = ""
     y = 5
@@ -49,10 +51,6 @@ def pgmFileRead(fileName):
     img = np.array(allVals)
     img = img.reshape(height,width)
 
-    print(img_header)
-    print('\n')
-    print(img)
-
     file.close()
     return img_header, img
 
@@ -66,8 +64,12 @@ def image_save(output_header, image_array, fileName):
 # @param: image array, pool size
 # @return: pooled array
 def max_pooling(input_array, pool_size):
+    newHeight = int(math.ceil(height/int(pool_size)))
+    newWidth = int(math.ceil(width/int(pool_size)))
     pooled_array = np.array([])   # a place holder
-
+    print (newHeight, newWidth)
+    pooled_array = np.zeros((newHeight, newWidth),dtype = int)
+    print (pooled_array)
 
     return pooled_array
 
@@ -83,8 +85,10 @@ def oil_painting(input_array, pool_size):
 def main():
     imgFileName, poolSize, part = sys.argv[1:]
 
-    pgmFileRead(imgFileName)
+    header, imgNum = pgmFileRead(imgFileName)
 
+    max_pooling(imgNum, poolSize)
+    
 
 if __name__ == '__main__':
     main()
