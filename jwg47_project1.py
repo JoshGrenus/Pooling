@@ -65,6 +65,9 @@ def image_save(output_header, image_array, fileName):
     periodIndex = fileName.index(".")
     newFileName = fileName[:periodIndex] + "_pooled_" + pS + fileName[periodIndex:]
     file = open(newFileName, "w")
+    print (output_header)
+    for line in output_header:
+        file.write(line + "\n")
     return None
 
 
