@@ -19,6 +19,8 @@ def pgmFileRead(fileName):
     img = np.array([])   # a place holder
     imgTmp = []     #temp array to hold pmg values
     imgHeadTmp = []
+    global imgHeadPreRemove
+    imgHeadPreRemove = []
     allVals = ""
 
     for line in file:                               #Loops through to get the header set up, stops after getting max num value.
@@ -27,9 +29,9 @@ def pgmFileRead(fileName):
            break
         else:
            img_header.append(line.strip())
-
+    imgHeadPreRemove = img_header
     for item in img_header:
-        if not item.startswith("#"):  # Use != to check for inequality
+        if not item.startswith("#"): 
             imgHeadTmp.append(item)
     img_header = imgHeadTmp
 
@@ -52,7 +54,7 @@ def pgmFileRead(fileName):
     img = np.zeros((height,width))
     img = np.array(allVals)
     img = img.reshape(height,width)
-
+    img = img.astype(int)
     file.close()
     return img_header, img
 
@@ -60,6 +62,9 @@ def pgmFileRead(fileName):
 # @param: image array; image header; name of the processed image
 # return: NaN
 def image_save(output_header, image_array, fileName):
+    periodIndex = fileName.index(".")
+    newFileName = fileName[:periodIndex] + "_pooled_" + pS + fileName[periodIndex:]
+    file = open(newFileName, "w")
     return None
 
 
@@ -70,17 +75,16 @@ def max_pooling(input_array, pool_size):
     newWidth = int(math.ceil(width/int(pool_size)))
     pooled_array = np.array([])   # a place holder
     pooled_array = np.zeros((newHeight, newWidth), dtype = int)
-    for x in range(newWidth):
-        for y in range(newHeight):
+    for x in range(newHeight):
+        for y in range(newWidth):
             xStart = x * int(pool_size)
             yStart = y * int(pool_size)
             xEnd = xStart + int(pool_size)
             yEnd = yStart + int(pool_size)
             vals = input_array[xStart:xEnd, yStart:yEnd]
             maxVal = vals.max()
-            print(vals)
-            print (maxVal)
-
+            pooled_array[x][y] = maxVal
+    print (pooled_array)
     
 
     return pooled_array
@@ -96,10 +100,13 @@ def oil_painting(input_array, pool_size):
 
 def main():
     imgFileName, poolSize, part = sys.argv[1:]
-
+    global pS
+    pS = poolSize
     header, imgNum = pgmFileRead(imgFileName)
 
-    max_pooling(imgNum, poolSize)
+    pooledArray = max_pooling(imgNum, poolSize)
+    print(pooledArray)
+    image_save(header, pooledArray, imgFileName)
     
 
 if __name__ == '__main__':
