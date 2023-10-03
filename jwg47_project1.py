@@ -64,10 +64,14 @@ def pgmFileRead(fileName):
 def image_save(output_header, image_array, fileName):
     periodIndex = fileName.index(".")
     newFileName = fileName[:periodIndex] + "_pooled_" + pS + fileName[periodIndex:]
-    file = open(newFileName, "w")
-    print (output_header)
+    
+    np.savetxt(newFileName, image_array, fmt='%s')
     for line in output_header:
         file.write(line + "\n")
+    with open("test.txt", "ab") as file:
+        file.write(b"\n")
+        numpy.savetxt(f, a)
+
     return None
 
 
@@ -87,7 +91,9 @@ def max_pooling(input_array, pool_size):
             vals = input_array[xStart:xEnd, yStart:yEnd]
             maxVal = vals.max()
             pooled_array[x][y] = maxVal
-    print (pooled_array)
+
+    #pooled_array = pooled_array.astype(str)
+
     
 
     return pooled_array
@@ -108,7 +114,7 @@ def main():
     header, imgNum = pgmFileRead(imgFileName)
 
     pooledArray = max_pooling(imgNum, poolSize)
-    print(pooledArray)
+    #print(pooledArray)
     image_save(header, pooledArray, imgFileName)
     
 
