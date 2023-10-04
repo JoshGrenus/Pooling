@@ -64,10 +64,11 @@ def pgmFileRead(fileName):
 def image_save(output_header, image_array, fileName):
     periodIndex = fileName.index(".")
     newFileName = fileName[:periodIndex] + "_pooled_" + pS + fileName[periodIndex:]
-    #np.savetxt(newFileName, image_array, fmt='%s')
+
     file = open (newFileName, "w")
     for line in output_header:
         file.write(line + "\n")
+    file.close()
     with open(newFileName, "ab") as f:
         print (image_array)
         np.savetxt(f, image_array, fmt='%3.0f')
