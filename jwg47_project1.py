@@ -57,8 +57,7 @@ def pgmFileRead(fileName):
     img = img.reshape(height,width)
     img = img.astype(int)
     file.close()
-    file2 = open ("totalNums.txt", "w")
-    np.savetxt(file2, img, fmt='%3.0f')
+
     return img_header, img
 
 
@@ -66,14 +65,17 @@ def pgmFileRead(fileName):
 # return: NaN
 def image_save(output_header, image_array, fileName):
     periodIndex = fileName.index(".")
-    newFileName = fileName[:periodIndex] + "_pooled_" + pS + fileName[periodIndex:]
+    if (imgType == "1"):
+        newFileName = fileName[:periodIndex] + "_pooled_" + pS + fileName[periodIndex:]
+    elif(imgType == "2"):
+        newFileName = fileName[:periodIndex] + "_oil_painted" + fileName[periodIndex:]
+
 
     file = open (newFileName, "w")
     for line in output_header:
         file.write(line + "\n")
     file.close()
     with open(newFileName, "ab") as f:
-        print (image_array)
         np.savetxt(f, image_array, fmt='%3.0f')
     
 
@@ -97,14 +99,8 @@ def max_pooling(input_array, pool_size):
             xEnd = xStart + int(pool_size)
             yEnd = yStart + int(pool_size)
             vals = input_array[xStart:xEnd, yStart:yEnd]
-            print (vals)
             maxVal = vals.max()
-            print (maxVal)
             pooled_array[x][y] = maxVal
-
-    #pooled_array = pooled_array.astype(str)
-
-    
 
     return pooled_array
 
@@ -112,21 +108,31 @@ def max_pooling(input_array, pool_size):
 # @param: image array, pool size
 # @return: oil painted image array
 def oil_painting(input_array, pool_size):
-    oil_array = np.array([])  # a place holder
-
+    oil_array = np.zeros((height, width), dtype = int)
+    for x in range (height):
+        for y in range (width):
+            xEnd = x + int(pool_size)
+            yEnd = y + int(pool_size)
+            vals = input_array[x:xEnd, y:yEnd]
+            med = int(np.median(vals))
+            oil_array[x:xEnd, y:yEnd] = med
+            
     return oil_array
 
 
 def main():
     imgFileName, poolSize, part = sys.argv[1:]
-    global pS
-    pS = poolSize
     header, imgNum = pgmFileRead(imgFileName)
-
-    pooledArray = max_pooling(imgNum, poolSize)
-    header[1] = newWidth + " " + newHeight
-    image_save(header, pooledArray, imgFileName)
-    
-
+    global pS
+    global imgType
+    pS = poolSize
+    imgType = part
+    if (part == "1"):
+        pooledArray = max_pooling(imgNum, poolSize)
+        header[1] = str(newWidth) + " " + str(newHeight)
+        image_save(header, pooledArray, imgFileName)
+    elif (part == "2"):
+        pooledArray = oil_painting(imgNum, poolSize)
+        image_save(header, pooledArray, imgFileName)
 if __name__ == '__main__':
     main()
