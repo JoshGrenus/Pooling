@@ -3,6 +3,7 @@
 import sys
 import numpy as np
 import math
+import time
 np.set_printoptions(threshold=sys.maxsize)
 
 
@@ -36,8 +37,8 @@ def pgmFileRead(fileName):
     img_header = imgHeadTmp
 
     pgmSize = img_header[1].split(" ")
-    height = int(pgmSize[0])
-    width = int(pgmSize[1])
+    width = int(pgmSize[0])
+    height = int(pgmSize[1])
     img = np.zeros((height,width))
 
     for line in file:
@@ -56,6 +57,8 @@ def pgmFileRead(fileName):
     img = img.reshape(height,width)
     img = img.astype(int)
     file.close()
+    file2 = open ("totalNums.txt", "w")
+    np.savetxt(file2, img, fmt='%3.0f')
     return img_header, img
 
 
@@ -72,6 +75,7 @@ def image_save(output_header, image_array, fileName):
     with open(newFileName, "ab") as f:
         print (image_array)
         np.savetxt(f, image_array, fmt='%3.0f')
+    
 
 
     return None
@@ -80,6 +84,8 @@ def image_save(output_header, image_array, fileName):
 # @param: image array, pool size
 # @return: pooled array
 def max_pooling(input_array, pool_size):
+    global newHeight
+    global newWidth
     newHeight = int(math.ceil(height/int(pool_size)))
     newWidth = int(math.ceil(width/int(pool_size)))
     pooled_array = np.array([])   # a place holder
@@ -91,7 +97,9 @@ def max_pooling(input_array, pool_size):
             xEnd = xStart + int(pool_size)
             yEnd = yStart + int(pool_size)
             vals = input_array[xStart:xEnd, yStart:yEnd]
+            print (vals)
             maxVal = vals.max()
+            print (maxVal)
             pooled_array[x][y] = maxVal
 
     #pooled_array = pooled_array.astype(str)
@@ -116,7 +124,7 @@ def main():
     header, imgNum = pgmFileRead(imgFileName)
 
     pooledArray = max_pooling(imgNum, poolSize)
-    #print(pooledArray)
+    header[1] = newWidth + " " + newHeight
     image_save(header, pooledArray, imgFileName)
     
 
