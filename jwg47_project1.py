@@ -87,8 +87,8 @@ def image_save(output_header, image_array, fileName):
 def max_pooling(input_array, pool_size):
     global newHeight
     global newWidth
-    newHeight = int(math.ceil(height/int(pool_size)))
-    newWidth = int(math.ceil(width/int(pool_size)))
+    newHeight = int(-(-height//int(pool_size)))
+    newWidth = int(-(-width//int(pool_size)))
     pooled_array = np.array([])   # a place holder
     pooled_array = np.zeros((newHeight, newWidth), dtype = int)
     for x in range(newHeight):
